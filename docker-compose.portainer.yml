@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  portainer:
+    image: portainer/portainer:1.22.2
+    ports:
+      - 127.0.0.1:8000:8000
+      - 127.0.0.1:9000:9000
+    volumes:
+      - portainer-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  portainer-data:
