@@ -1,4 +1,4 @@
-.PHONY: help portainer
+.PHONY: help portainer-start portainer-stop
 
 .DEFAULT: help
 
@@ -6,9 +6,9 @@ portainer-start:  ## Start portainer service
 	docker-compose -f docker-compose.portainer.yml up -d
 
 portainer-stop:  ## Stop portainer service
-	docker-compose down --remove-orphans
+	docker-compose -f docker-compose.portainer.yml down --remove-orphans
 
-stop-docker:  ## Stop and delete ALL docker containers
+docker-stop:  ## Stop and delete ALL docker containers
 	docker stop $$(docker ps -aq) && docker rm $$(docker ps -aq)
 
 help:  ## Display this help
