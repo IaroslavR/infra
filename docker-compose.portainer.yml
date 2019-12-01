@@ -2,10 +2,10 @@ version: '3'
 
 services:
   portainer:
-    image: portainer/portainer:1.22.2
+    image: ${PORTAINER_IMAGE}
     ports:
-      - 127.0.0.1:8000:8000
-      - 127.0.0.1:9000:9000
+      - 127.0.0.1:${PORTAINER_SERVER_PORT}:8000
+      - 127.0.0.1:${PORTAINER_GUI_PORT}:9000
     volumes:
       - portainer-data:/data
       - /var/run/docker.sock:/var/run/docker.sock
