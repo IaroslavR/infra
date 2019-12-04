@@ -1,7 +1,9 @@
 version: '3'
 
 services:
+
   portainer:
+    restart: always  # https://stackoverflow.com/a/53569049/4249707
     image: ${PORTAINER_IMAGE}
     ports:
       - 127.0.0.1:${PORTAINER_SERVER_PORT}:8000
