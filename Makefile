@@ -13,7 +13,7 @@ swarm-init:  ## Init docker swarm
 	docker swarm init
 
 swarm-start:  ## Start docker swarm stack
-	docker stack deploy -c docker-compose.swarm.yml ${STACK_NAME}
+	docker stack deploy -c docker-compose.swarm.yml ${COMPOSE_PROJECT_NAME}
 
 portainer-start:  ## Start portainer service
 	docker-compose -f docker-compose.portainer.yml up -d
@@ -22,7 +22,7 @@ portainer-stop:  ## Stop portainer service
 	docker-compose -f docker-compose.portainer.yml down --remove-orphans
 
 swarm-stop:  ## Stop docker swarm stack
-	docker stack rm ${STACK_NAME}
+	docker stack rm ${COMPOSE_PROJECT_NAME}
 
 docker-stop:  ## Stop and delete ALL docker containers
 	docker stop $$(docker ps -aq) && docker rm $$(docker ps -aq)
