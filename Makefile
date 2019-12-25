@@ -26,3 +26,19 @@ swarm-stop:  ## Stop docker swarm stack
 
 docker-stop:  ## Stop and delete ALL docker containers
 	docker stop $$(docker ps -aq) && docker rm $$(docker ps -aq)
+
+infra-init: ## Init Terraform infrastructure
+	cd terraform/aws && terragrunt init
+	cd terraform/google && terragrunt init
+
+infra-test: ## Test Terraform infrastructure
+	cd terraform/aws && terragrunt plan
+	cd terraform/google && terragrunt plan
+
+infra-deploy:
+	cd terraform/aws && terragrunt apply
+	cd terraform/google && terragrunt apply
+
+infra-print:  ## Print Terraform infrastructure output variables
+	cd terraform/aws && terragrunt output
+	cd terraform/google && terragrunt output

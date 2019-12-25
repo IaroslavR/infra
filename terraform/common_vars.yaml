@@ -1,0 +1,9 @@
+aws_region: us-east-1
+aws_credentials: /home/iaro/.aws/credentials
+aws_profile: im
+name: infra-root
+env: production
+terraform_state_bucket: terraform-state-infra-root-9n69rd55d57dp9u9
+terraform_state_lock_table: terraform-locks
+google_region: us-central1
+google_credentials: /home/iaro/.config/gcloud/legacy_credentials/yarik.in.chains@googlemail.com/adc.json

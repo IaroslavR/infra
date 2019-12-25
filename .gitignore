@@ -1,2 +1,13 @@
+!.gitkeep
+# IDE files
 .idea/
-/data
+# Mounting point
+data/
+
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
