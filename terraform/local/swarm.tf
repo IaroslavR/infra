@@ -38,13 +38,13 @@ provider "docker" {
 resource "docker_network" "private" {
   name   = "private"
   driver = "overlay"
-//  attachable = true
+  attachable = true
   internal = true
 }
 
 resource "docker_network" "public" {
   name   = "public"
   driver = "overlay"
-//  attachable = true
-//  internal = false
+  attachable = true
+  internal = false
 }
