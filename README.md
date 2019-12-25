@@ -6,6 +6,7 @@ https://www.codementor.io/@byjg/creating-a-docker-swarm-stack-with-terraform-ter
 
 https://poweruser.blog/how-to-encrypt-secrets-in-config-files-1dbb794f7352?gi=47a33348fa5
 
+https://sematext.com/guides/docker-logs/
 
 ## Reqs
 

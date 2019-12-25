@@ -7,3 +7,4 @@ terraform_state_bucket: terraform-state-infra-root-9n69rd55d57dp9u9
 terraform_state_lock_table: terraform-locks
 google_region: us-central1
 google_credentials: /home/iaro/.config/gcloud/legacy_credentials/yarik.in.chains@googlemail.com/adc.json
+docker_swarm_manager_ip: 192.168.99.100

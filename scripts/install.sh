@@ -12,3 +12,5 @@ sudo apt-get update && sudo apt-get install google-cloud-sdk -y
 
 # AWS cli
 conda install awscli
+# Utils
+conda install httpie -c conda-forge
