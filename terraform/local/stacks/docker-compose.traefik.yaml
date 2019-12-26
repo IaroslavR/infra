@@ -7,7 +7,9 @@ services:
       - public
     command:
       - --entrypoints.http.address=:80
+#      - --entrypoints.https.address=:443
       - --providers.docker
+#      - --providers.file.filename=/certs/certs.yml
 #      - --providers.docker.swarmMode=true
       - --providers.docker.network=public
       - --providers.docker.exposedbydefault=false
@@ -21,11 +23,13 @@ services:
       - 443:44
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/certs
     labels:
       # Dashboard
       traefik.enable: "true"
-      traefik.http.routers.traefik.rule: Host(`traefik.th.is`)
+#      traefik.http.routers.my-app.tls: "true"
       traefik.http.routers.traefik.entrypoints: http
+      traefik.http.routers.traefik.rule: Host(`traefik.th.is`)
       traefik.http.routers.traefik.service: api@internal
 #      traefik.http.routers.traefik.middlewares: authtraefik
 #      Basic auth (login: user | password: password)
@@ -40,8 +44,9 @@ services:
       - public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.whoami.rule: Host(`whoami.th.is`)
+#      traefik.http.routers.traefik.tls: "true"
       traefik.http.routers.whoamientrypoints: http
+      traefik.http.routers.whoami.rule: Host(`whoami.th.is`)
       traefik.http.services.whoami.loadbalancer.server.port: 8082
 #      traefik.http.routers.whoami.middlewares: auth
 #      Basic auth (login: user | password: password)
