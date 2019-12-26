@@ -1,4 +1,4 @@
-output "swarm_node_ip" {
+output "swarm_manager_ip" {
   value = var.ip
 }
 
@@ -10,6 +10,7 @@ output "swarm_manager_token" {
   value = data.local_file.manager_swarm_token.content
 }
 
-//output "volume_portainer_name" {
-//  value = docker_volume.portainer.name
-//}
+output "volume_portainer_name" {
+  value = docker_volume.portainer.name
+}
+

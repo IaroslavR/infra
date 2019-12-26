@@ -9,7 +9,7 @@ terraform {
 resource "null_resource" "docker_swarm" {
 
   provisioner "local-exec" {
-    command = "docker swarm init --advertise-addr ${var.ip} && docker swarm join-token worker -q > ${path.cwd}/data/worker_swarm_token.txt && docker swarm join-token manager -q > ${path.cwd}/data/manager_swarm_token.txt"
+    command = "docker swarm init --advertise-addr ${var.ip} && sleep 5 && docker swarm update --task-history-limit 0 && docker swarm join-token worker -q > ${path.cwd}/data/worker_swarm_token.txt && docker swarm join-token manager -q > ${path.cwd}/data/manager_swarm_token.txt"
   }
 
   provisioner "local-exec" {
@@ -40,6 +40,7 @@ resource "docker_network" "private" {
   driver = "overlay"
   attachable = true
   internal = true
+  depends_on = [null_resource.docker_swarm]
 }
 
 resource "docker_network" "public" {
@@ -47,4 +48,10 @@ resource "docker_network" "public" {
   driver = "overlay"
   attachable = true
   internal = false
+  depends_on = [null_resource.docker_swarm]
+}
+
+resource "docker_volume" "portainer" {
+  name = "portainer"
+  depends_on = [null_resource.docker_swarm]
 }

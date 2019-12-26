@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   traefik:
-    image: "traefik:v2.1.1"
+    image: traefik:v2.1.1
     networks:
       - public
     command:
@@ -23,14 +23,15 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       # Dashboard
-      - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.docker.home`)"
-      - "traefik.http.routers.traefik.entrypoints=http"
-      - "traefik.http.routers.traefik.service=api@internal"
-#      - "traefik.http.routers.traefik.middlewares=authtraefik"
-#      - "traefik.http.middlewares.authtraefik.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/" # user/password
+      traefik.enable: "true"
+      traefik.http.routers.traefik.rule: Host(`traefik.th.is`)
+      traefik.http.routers.traefik.entrypoints: http
+      traefik.http.routers.traefik.service: api@internal
+#      traefik.http.routers.traefik.middlewares: authtraefik
+#      Basic auth (login: user | password: password)
+#      traefik.http.middlewares.authtraefik.basicauth.users: user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/
 
-  my-app:
+  whoami:
     image: containous/whoami:v1.3.0
     command:
       # It tells whoami to start listening on 8082 instead of 80
@@ -38,14 +39,26 @@ services:
     networks:
       - public
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.my-app.rule=Host(`whoami.docker.home`)"
-      - "traefik.http.routers.my-app.entrypoints=http"
-      - "traefik.http.services.my-app.loadbalancer.server.port=8082"
-#      - "traefik.http.routers.my-app.middlewares=auth"
-#      - "traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/" # user/password
-
-# Basic auth (login: user | password: password)
+      traefik.enable: "true"
+      traefik.http.routers.whoami.rule: Host(`whoami.th.is`)
+      traefik.http.routers.whoamientrypoints: http
+      traefik.http.services.whoami.loadbalancer.server.port: 8082
+#      traefik.http.routers.whoami.middlewares: auth
+#      Basic auth (login: user | password: password)
+#      traefik.http.middlewares.auth.basicauth.users: user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 32M
+        reservations:
+          cpus: '0.05'
+          memory: 10M
 
 networks:
   public:
