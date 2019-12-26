@@ -1,8 +1,13 @@
-## Swarm
+## Local Swarm and Keys management
 
-### CAVEATS
+### Traefik
+**CAVEATS**
 * [Traefik is a layer 7 reverse proxy](https://docs.traefik.io/)
-* Docker Terraform provider not stable, so `docker stack deploy` used for swarm stacks deploy
+* [Docker Terraform provider](https://www.terraform.io/docs/providers/docker/index.html) not stable, so `docker stack deploy` used for swarm stacks deploy
+
+##### Articles
+
+[Traefik 2.0 & Docker 101](https://containo.us/blog/traefik-2-0-docker-101-fc2893944b9d/)
 
 ### Keys
 
@@ -10,16 +15,12 @@
 - [GCloud KMS](https://cloud.google.com/kms/pricing) (Hardware) $1 per month. $0.03 per 10,000 operations
 - GCloud KMS (Software) $0.06 per month. $0.03 per 10,000 operations
 
-https://www.codementor.io/@byjg/creating-a-docker-swarm-stack-with-terraform-terrascript-python-persistent-volumes-and-dynamic-haproxy-x57fmbvhq
-
-https://poweruser.blog/how-to-encrypt-secrets-in-config-files-1dbb794f7352?gi=47a33348fa5
-
-
 ##### Articles
 
-[ Vault vs. Amazon KMS](https://www.vaultproject.io/docs/vs/kms.html)
+[Vault vs. Amazon KMS](https://www.vaultproject.io/docs/vs/kms.html)
+[How to manage secrets with Mozilla SOPS](https://poweruser.blog/how-to-encrypt-secrets-in-config-files-1dbb794f7352?gi=47a33348fa5)
 
-### Troubleshooting
+### Docker Troubleshooting
 
 `docker service ls`
 
