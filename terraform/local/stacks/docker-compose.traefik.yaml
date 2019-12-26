@@ -1,16 +1,52 @@
-version: "3.3"
+version: "3.7"
 
 services:
   traefik:
-    image: "traefik:v2.0.1"
+    image: "traefik:v2.1.1"
+    networks:
+      - public
     command:
-      - --entrypoints.web.address=:80
+      - --entrypoints.http.address=:80
       - --providers.docker
-      - --api.insecure # Don't do that in production
+#      - --providers.docker.swarmMode=true
+      - --providers.docker.network=public
+      - --providers.docker.exposedbydefault=false
+      - --api.insecure
+      - --api.dashboard=true # see https://docs.traefik.io/v2.0/operations/dashboard/#secure-mode for how to secure the dashboard
+      - --api.debug=true # enable additional endpoints for debugging and profiling
+      - --log.level=DEBUG # debug while we get it working
+      - --accesslog=true
     ports:
-      - "80:80"
+      - 80:80
+      - 443:44
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      # Dashboard
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.docker.home`)"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.service=api@internal"
+#      - "traefik.http.routers.traefik.middlewares=authtraefik"
+#      - "traefik.http.middlewares.authtraefik.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/" # user/password
 
   my-app:
     image: containous/whoami:v1.3.0
+    command:
+      # It tells whoami to start listening on 8082 instead of 80
+      - --port=8082
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.my-app.rule=Host(`whoami.docker.home`)"
+      - "traefik.http.routers.my-app.entrypoints=http"
+      - "traefik.http.services.my-app.loadbalancer.server.port=8082"
+#      - "traefik.http.routers.my-app.middlewares=auth"
+#      - "traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/" # user/password
+
+# Basic auth (login: user | password: password)
+
+networks:
+  public:
+    external: true
