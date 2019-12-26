@@ -8,6 +8,19 @@ https://poweruser.blog/how-to-encrypt-secrets-in-config-files-1dbb794f7352?gi=47
 
 https://sematext.com/guides/docker-logs/
 
-## Reqs
+## Troubles
+
+docker service ls
+
+docker service ps traefic
+
+docker service logs traefic
+
+sudo journalctl -fu docker.service
+
+### DNS
+https://askubuntu.com/questions/1029882/how-can-i-set-up-local-wildcard-127-0-0-1-domain-resolution-on-18-04?rq=1
+
+IP of docker see `ifconfig` must be set
 
 
