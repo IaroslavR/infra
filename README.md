@@ -45,4 +45,33 @@ Modify:
 ##### Articles
 - [MKCERT: valid HTTPS Certificates For localhost](https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/)
 
+### Not sorted
+Node cleanup solution [[src](https://github.com/moby/moby/issues/31254#issuecomment-464668235)]
+```yaml
+  system-prune:
+    image: docker
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: docker system prune --all --force
+    deploy:
+      mode: global
+      restart_policy:
+        delay: 24h
+```
+
+##### Monitoring
+
+![table](docs/Selection_012.png)  
+from [Docker Container Monitoring Open Source Tools](https://sematext.com/blog/open-source-docker-monitoring-logging/)
+
+https://github.com/imixs/imixs-cloud/tree/master/management/monitoring
+
+https://blog.ruanbekker.com/blog/2019/09/05/deploy-a-monitoring-stack-on-docker-swarm-with-grafana-and-prometheus/
+
+https://itnext.io/docker-swarm-monitoring-4dfe88c72d56?  
+https://github.com/opvizordz/docker-swarm-monitor
+
+
+
+
 
