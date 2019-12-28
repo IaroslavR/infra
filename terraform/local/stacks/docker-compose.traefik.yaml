@@ -1,13 +1,28 @@
 version: "3.7"
 
+x-default-opts:
+  &default-opts
+  deploy:
+    replicas: 1
+    placement:
+      constraints: [node.role == manager]
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+      max_attempts: 3
+      window: 20s
+
 services:
   traefik:
     image: traefik:v2.1.1
+    <<: *default-opts
     networks:
       - public
+      - traefik-docker
     command:
       - --entrypoints.http.address=:80
       - --providers.docker
+      - --providers.docker.endpoint=http://dockersocket:2375
 #      - --providers.docker.swarmMode=true
       - --providers.docker.network=public
       - --providers.docker.exposedbydefault=false
@@ -46,23 +61,30 @@ services:
 #      traefik.http.routers.whoami.middlewares: auth
 #      Basic auth (login: user | password: password)
 #      traefik.http.middlewares.auth.basicauth.users: user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/
-    deploy:
-      replicas: 1
-      placement:
-        constraints: [node.role == manager]
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 20s
-      resources:
-        limits:
-          cpus: '0.10'
-          memory: 32M
-        reservations:
-          cpus: '0.05'
-          memory: 10M
+    <<: *default-opts
+#      resources:
+#        limits:
+#          cpus: '0.10'
+#          memory: 32M
+#        reservations:
+#          cpus: '0.05'
+#          memory: 10M
+
+## https://github.com/containous/traefik/issues/4174#issuecomment-446564816:
+  dockersocket:
+      image: tecnativa/docker-socket-proxy
+      <<: *default-opts
+      networks:
+        - traefik-docker
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      environment:
+        CONTAINERS: 1
+        NETWORKS: 1
+        SERVICES: 1
+        TASKS: 1
 
 networks:
   public:
     external: true
+  traefik-docker:

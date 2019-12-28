@@ -9,6 +9,7 @@
 * [Traefik 2.0 & Docker 101](https://containo.us/blog/traefik-2-0-docker-101-fc2893944b9d/)  
 * [traefik-forward-auth README examples for Traefik 2](https://github.com/thomseddon/traefik-forward-auth/issues/74)
 * [MKCERT: valid HTTPS Certificates For localhost](https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/)
+* [Docker Swarm CI deployment using Ansible and Jenkins](https://medium.com/@adrian.gheorghe.dev/docker-swarm-ci-deployment-using-ansible-and-jenkins-ddfc99296db8)
 
 ### Keys
 
