@@ -52,6 +52,9 @@ services:
         constraints: [node.role == manager]
       restart_policy:
         condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 20s
       resources:
         limits:
           cpus: '0.10'

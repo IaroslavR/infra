@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.7'
 
 services:
   portainer:
@@ -16,7 +16,6 @@ services:
 
 volumes:
   portainer:
-    external: true
 
 networks:
   public:

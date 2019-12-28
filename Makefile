@@ -30,6 +30,8 @@ local-swarm:
 		docker stack deploy infra --compose-file=docker-compose.traefik.yaml
 	cd terraform/local/stacks && \
     	docker stack deploy infra --compose-file=docker-compose.portainer.yaml
+	cd terraform/local/stacks && \
+    	docker stack deploy conda --compose-file=docker-compose.conda.yaml
 
 local-infra:
 	cd terraform/local && terragrunt apply -auto-approve

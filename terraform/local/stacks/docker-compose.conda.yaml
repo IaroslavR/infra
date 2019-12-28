@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  python:
+    image: continuumio/miniconda3:4.7.12
+    networks:
+      - public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.python.rule: Host(`python.th.is`)
+      traefik.http.routers.python.entrypoints: http
+      traefik.http.services.python.loadbalancer.server.port: 5000
+    entrypoint:
+      - python
+    command:
+      - "-m"
+      - "http.server"
+      - "5000"
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 20s
+
+networks:
+  public:
+    external: true
