@@ -6,8 +6,9 @@
 * [Docker Terraform provider](https://www.terraform.io/docs/providers/docker/index.html) not stable, so `docker stack deploy` used for swarm stacks deploy
 
 ##### Articles
-
-[Traefik 2.0 & Docker 101](https://containo.us/blog/traefik-2-0-docker-101-fc2893944b9d/)
+* [Traefik 2.0 & Docker 101](https://containo.us/blog/traefik-2-0-docker-101-fc2893944b9d/)  
+* [traefik-forward-auth README examples for Traefik 2](https://github.com/thomseddon/traefik-forward-auth/issues/74)
+* [MKCERT: valid HTTPS Certificates For localhost](https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/)
 
 ### Keys
 
@@ -42,35 +43,21 @@ Modify:
 - Edit `/etc/NetworkManager/dnsmasq.d/example.com-wildcard.conf` string `address=/.th.is/172.21.0.1`
 - `sudo systemctl reload NetworkManager`  
 
-##### Articles
-- [MKCERT: valid HTTPS Certificates For localhost](https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/)
-
-### Not sorted
-Node cleanup solution [[src](https://github.com/moby/moby/issues/31254#issuecomment-464668235)]
-```yaml
-  system-prune:
-    image: docker
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    command: docker system prune --all --force
-    deploy:
-      mode: global
-      restart_policy:
-        delay: 24h
-```
-
 ##### Monitoring
 
 ![table](docs/Selection_012.png)  
 from [Docker Container Monitoring Open Source Tools](https://sematext.com/blog/open-source-docker-monitoring-logging/)
 
-https://github.com/imixs/imixs-cloud/tree/master/management/monitoring
+[Swarmprom Prometheus, Grafana, cAdvisor, Node Exporter, Alert Manager and Unsee.](https://github.com/stefanprodan/swarmprom)
+
+[Prometheus, Grafana, cAdvisor, Node Exporter](https://github.com/imixs/imixs-cloud/tree/master/management/monitoring)
 
 https://blog.ruanbekker.com/blog/2019/09/05/deploy-a-monitoring-stack-on-docker-swarm-with-grafana-and-prometheus/
 
 https://itnext.io/docker-swarm-monitoring-4dfe88c72d56?  
 https://github.com/opvizordz/docker-swarm-monitor
 
+https://www.influxdata.com/blog/how-to-setup-influxdb-telegraf-and-grafana-on-docker-part-1/
 
 
 
