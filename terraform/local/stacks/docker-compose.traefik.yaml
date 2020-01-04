@@ -22,6 +22,7 @@ services:
       - traefik-docker
     command:
       - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
       - --providers.docker
       - --providers.docker.endpoint=http://dockersocket:2375
 #      - --providers.docker.swarmMode=true
@@ -34,7 +35,8 @@ services:
       - --accesslog=true
     ports:
       - 80:80
-      - 443:44
+      - 443:443
+#      - 5432:5432
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
@@ -56,9 +58,15 @@ services:
       - public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.whoami.rule: Host(`whoami.th.is`)
-      traefik.http.routers.whoamientrypoints: http
-      traefik.http.services.whoami.loadbalancer.server.port: 8082
+      traefik.http.routers.whoami-http.rule: Host(`whoami.th.is`)
+      traefik.http.routers.whoami-http.entrypoints: http
+      traefik.http.routers.whoami-http.service: whoami-http
+      traefik.http.services.whoami-http.loadbalancer.server.port: 8082
+      traefik.http.routers.whoami-https.rule: Host(`whoami.th.is`)
+      traefik.http.routers.whoami-https.tls: "true"
+      traefik.http.routers.whoami-https.entrypoints: https
+      traefik.http.routers.whoami-https.service: whoami-https
+      traefik.http.services.whoami-https.loadbalancer.server.port: 8082
 #      traefik.http.routers.whoami.middlewares: auth
 #      Basic auth (login: user | password: password)
 #      traefik.http.middlewares.auth.basicauth.users: user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/
