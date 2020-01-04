@@ -1,0 +1,11 @@
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+
+providers:
+  docker:
+    endpoint: http://dockersocket:2375
+    exposedByDefault: false
+    network: public

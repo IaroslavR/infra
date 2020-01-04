@@ -1,0 +1,7 @@
+tls:
+  options:
+    default:
+  #      sniStrict: true
+  certificates:
+    - certFile: /config/_wildcard.th.is.pem
+      keyFile: /config/_wildcard.th.is-key.pem
