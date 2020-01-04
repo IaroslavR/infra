@@ -9,8 +9,3 @@ output "swarm_worker_token" {
 output "swarm_manager_token" {
   value = data.local_file.manager_swarm_token.content
 }
-
-output "volume_portainer_name" {
-  value = docker_volume.portainer.name
-}
-

@@ -35,23 +35,10 @@ provider "docker" {
   host = "unix:///var/run/docker.sock"
 }
 
-resource "docker_network" "private" {
-  name   = "private"
-  driver = "overlay"
-  attachable = true
-  internal = true
-  depends_on = [null_resource.docker_swarm]
-}
-
 resource "docker_network" "public" {
   name   = "public"
   driver = "overlay"
   attachable = true
   internal = false
-  depends_on = [null_resource.docker_swarm]
-}
-
-resource "docker_volume" "portainer" {
-  name = "portainer"
   depends_on = [null_resource.docker_swarm]
 }
