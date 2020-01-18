@@ -46,11 +46,11 @@ services:
     labels:
       traefik.enable: "true"
       # global redirect to https
-      traefik.http.routers.https-redirect.rule: hostregexp(`{host:.+}`)
-      traefik.http.routers.https-redirect.entrypoints: http
-      traefik.http.routers.https-redirect.middlewares: https-redirect
+#      traefik.http.routers.https-redirect.rule: hostregexp(`{host:.+}`)
+#      traefik.http.routers.https-redirect.entrypoints: http
+#      traefik.http.routers.https-redirect.middlewares: https-redirect
       # middleware redirect
-      traefik.http.middlewares.https-redirect.redirectscheme.scheme: https
+#      traefik.http.middlewares.https-redirect.redirectscheme.scheme: https
       # dashboard
       traefik.http.routers.traefik.rule: Host(`traefik.th.is`)
       traefik.http.routers.traefik.entrypoints: https
