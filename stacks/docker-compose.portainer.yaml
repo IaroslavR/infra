@@ -4,7 +4,6 @@ services:
   portainer:
     image: portainer/portainer:1.23.0
     volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
       - portainer:/data
     environment:
       AGENT_SECRET: 0c41adac4dc4923b6878ad764b4a6f29
@@ -16,9 +15,13 @@ services:
     labels:
       traefik.enable: "true"
       traefik.http.routers.portainer.rule: Host(`portainer.th.is`)
-      traefik.http.routers.portainer.entrypoints: https
       traefik.http.routers.portainer.tls: "true"
+      traefik.http.routers.portainer.entrypoints: https
+      traefik.http.routers.portainer.service: portainer
       traefik.http.services.portainer.loadbalancer.server.port: 9000
+      traefik.http.routers.portainer-http.rule: hostregexp(`{host:.+}`)
+      traefik.http.routers.portainer-http.entrypoints: http
+      traefik.http.routers.portainer-http.middlewares: redirect-to-https
 
   agent:
     image: portainer/agent

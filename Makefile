@@ -25,13 +25,22 @@ infra-print:  ## Print Terraform infrastructure output variables
 	cd terraform/aws && terragrunt output
 	cd terraform/google && terragrunt output
 
-local-swarm:
-	cd terraform/local/stacks && \
-		docker stack deploy traefik --compose-file=docker-compose.traefik.yaml --prune
-	cd terraform/local/stacks && \
-    	docker stack deploy portainer --compose-file=docker-compose.portainer.yaml --prune
-	cd terraform/local/stacks && \
-    	docker stack deploy conda --compose-file=docker-compose.test.yaml --prune
+traefik:
+	docker stack deploy infra --compose-file=stacks/docker-compose.traefik.yaml
+
+portainer:
+	docker stack deploy infra --compose-file=stacks/docker-compose.portainer.yaml
+
+socket:
+	docker stack deploy infra --compose-file=stacks/docker-compose.docker-proxy.yaml
+
+prometeus:
+	docker stack deploy infra --compose-file=stacks/docker-compose.prometeus.yaml
+
+test-server:
+	docker stack deploy test --compose-file=stacks/docker-compose.test.yaml
+
+local-swarm: portainer traefik prometeus socket
 
 local-infra:
 	cd terraform/local && terragrunt apply -auto-approve

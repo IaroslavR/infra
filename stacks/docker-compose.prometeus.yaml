@@ -1,0 +1,104 @@
+version: '3.7'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.15.2
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.prometheus.rule: Host(`prometheus.th.is`)
+      traefik.http.routers.prometheus.tls: "true"
+      traefik.http.routers.prometheus.entrypoints: https
+      traefik.http.routers.prometheus.service: prometheus
+      traefik.http.services.prometheus.loadbalancer.server.port: 9090
+      traefik.http.routers.prometheus-http.rule: hostregexp(`{host:.+}`)
+      traefik.http.routers.prometheus-http.entrypoints: http
+      traefik.http.routers.prometheus-http.middlewares: redirect-to-https
+    volumes:
+      - prometheus:/prometheus
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
+    networks:
+      - public
+      - prometheus
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+          - node.hostname == 8470p
+      resources:
+        limits:
+          memory: 2048M
+        reservations:
+          memory: 128M
+
+  node-exporter:
+    image: prom/node-exporter:v0.18.1
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/host'
+      - '--collector.filesystem.ignored-mount-points="^(/rootfs|/host|)/(sys|proc|dev|host|etc)($$|/)"'
+      - '--collector.filesystem.ignored-fs-types="^(sys|proc|auto|cgroup|devpts|ns|au|fuse\.lxc|mqueue)(fs|)$$"'
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == 8470p
+    networks:
+      - prometheus
+
+  cadvisor:
+    image: google/cadvisor:v0.33.0
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == 8470p
+    networks:
+      - prometheus
+
+  grafana:
+    image: grafana/grafana:6.5.3
+    volumes:
+      - grafana:/var/lib/grafana
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == 8470p
+    networks:
+      - public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.grafana.rule: Host(`grafana.th.is`)
+      traefik.http.routers.grafana.tls: "true"
+      traefik.http.routers.grafana.entrypoints: https
+      traefik.http.routers.grafana.service: grafana
+      traefik.http.services.grafana.loadbalancer.server.port: 3000
+      traefik.http.routers.grafana-http.rule: hostregexp(`{host:.+}`)
+      traefik.http.routers.grafana-http.entrypoints: http
+      traefik.http.routers.grafana-http.middlewares: redirect-to-https
+
+networks:
+  public:
+    external: true
+  prometheus:
+    attachable: false
+
+
+volumes:
+  prometheus:
+  grafana:
+
+configs:
+  prometheus:
+    file: ./prometheus/prometheus.yml

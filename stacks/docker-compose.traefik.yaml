@@ -19,55 +19,47 @@ services:
       <<: *default-opts
     networks:
       - public
-      - traefik-docker
+      - traefik-socket
     command:
       - --entrypoints.http.address=:80
       - --entrypoints.https.address=:443
+      # https://docs.traefik.io/v2.0/reference/static-configuration/cli/
 #      - --configfile=/config/traefik.yml
       - --providers.file.filename=/config/dynamic.yml
       - --providers.file.watch=true
       - --providers.docker
-      - --providers.docker.endpoint=http://dockersocket:2375
+      - --providers.docker.endpoint=http://traefik-socket:2375
 #      - --providers.docker.swarmMode=true
       - --providers.docker.network=public
       - --providers.docker.exposedbydefault=false
       # https://docs.traefik.io/v2.0/operations/api/
       - --api.dashboard=true
 #      - --api.debug=true # enable additional endpoints for debugging and profiling
-      # https://docs.traefik.io/v2.0/reference/static-configuration/cli/
-#      - --log.level=DEBUG # debug while we get it working
+#      - --log.level=DEBUG
 #      - --accesslog=true
     ports:
       - 80:80
       - 443:443
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik:/config
     labels:
       traefik.enable: "true"
-      # global redirect to https
-#      traefik.http.routers.https-redirect.rule: hostregexp(`{host:.+}`)
-#      traefik.http.routers.https-redirect.entrypoints: http
-#      traefik.http.routers.https-redirect.middlewares: https-redirect
-      # middleware redirect
-#      traefik.http.middlewares.https-redirect.redirectscheme.scheme: https
-      # dashboard
+      traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
       traefik.http.routers.traefik.rule: Host(`traefik.th.is`)
       traefik.http.routers.traefik.entrypoints: https
       traefik.http.routers.traefik.tls: "true"
       traefik.http.routers.traefik.service: api@internal
-      # basic auth
-#      traefik.http.routers.traefik.middlewares: authtraefik
-#      Basic auth (login: user | password: password)
-#      traefik.http.middlewares.authtraefik.basicauth.users: user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/
+      traefik.http.routers.traefik-http.rule: hostregexp(`{host:.+}`)
+      traefik.http.routers.traefik-http.entrypoints: http
+      traefik.http.routers.traefik-http.middlewares: redirect-to-https
 
 # https://github.com/containous/traefik/issues/4174#issuecomment-446564816:
-  dockersocket:
+  traefik-socket:
       image: tecnativa/docker-socket-proxy
       deploy:
         <<: *default-opts
       networks:
-        - traefik-docker
+        - traefik-socket
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
       environment:
@@ -79,4 +71,5 @@ services:
 networks:
   public:
     external: true
-  traefik-docker:
+  traefik-socket:
+    attachable: false
